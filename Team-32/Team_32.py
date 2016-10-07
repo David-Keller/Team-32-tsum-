@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 
-first = cv2.imread('test3.png',1)
+first = cv2.imread('test4.png',1)
 start = time.time()
 seconds = 0
 count = 0
@@ -25,17 +25,12 @@ while(True):
 
 
     img = cv2.medianBlur(img,5)
-
-
     img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
 
 
     #this line is being honed in becuse it has to do with the criteria for detecting circles
     circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,50,
                                 param1=50,param2=12,minRadius=40,maxRadius=50)
-
-
-
     circles = np.uint16(np.around(circles))
 
 
@@ -48,7 +43,7 @@ while(True):
 
 
 
-
+    #grab the regons of interest
     roiFirst = []
     for i in circle[0:]:
         # draw the outer circle
@@ -64,7 +59,7 @@ while(True):
 
 
 
-
+    #put a black circle mask over the regons of interest
     num = 0
     roi = []
     for i in roiFirst:
@@ -84,17 +79,24 @@ while(True):
     #calculate histograms
     num = 0
     for i in roi:
+        if(i is None):
+            print("None error")
+            continue
         temp = cv2.calcHist([i],[0,1,2], None,[8,8,8], [0,256,0,256,0,256])
         hist.append((cv2.normalize(temp, temp).flatten(),num))
         num = num +1
 
+
+
+    #histogram comparason and then sorting
     types = []
     types.append([hist[0]])
     for i in hist[1:]:
         found = False
         for j in types:
+
             temp = cv2.compareHist(i[0],j[0][0],method=0)
-            if(temp > .8):## this is the value that determins how close the histograms have to be
+            if(temp > .85):## this is the value that determins how close the histograms have to be
                 j.append(i)
                 found = True
                 break   
