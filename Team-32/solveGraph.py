@@ -86,8 +86,6 @@ class NodeSet:
                                                 bestPath = thisPath
                                 else:
                                         bestPath = thisPath
-                print("foo:")
-                print(bestPath)
                 return bestPath
 
 
@@ -139,20 +137,30 @@ class NodeMap:
 
 timeA = time()
 
-def createMap(self, inputMap):
+def createMap(inputMap):
         thisMap = NodeMap()
+        #FIX check for empty lists
         for type in range(5):
-                for node in type:
-                        print(node)
+                thisType = inputMap[type]
+                for node in thisType:
+                        thisMap.add(Node(node[0],node[1], type, str(node[0]) + " " + str(node[1])))
         thisMap.connectNodes()
         thisMap.formNodeSets()
         for nodeSet in thisMap.nodeSetList:
                 #REMOVE THIS
-                nodeSet.display()
+#                nodeSet.display()
+#                solvedPath =nodeSet.solveValue() 
                 for node in nodeSet.solveValue():
-                        print(node, end ='->')
+                        print(node.name, end ='->')
                 print("")
 
+tsums = list()
+tsums.append([5,8,1])
+tsums.append([3,8,1])
+tsums.append([1,8,1])
+types = list([tsums,list(),list(),list(),list()])
+#fullMap = list([types])
+createMap(types)
 #a = list()
 #a.append(Node(0,0,"red", "a1"))
 #a.append(Node(1,1,"red", "a2"))
@@ -160,6 +168,7 @@ def createMap(self, inputMap):
 #a.append(Node(3,2,"red", "a4"))
 #a.append(Node(3,0,"red", "a5"))
 #a.append(Node(4,1,"red", "a6"))
+#NM = NodeMap()
 #for node in a:
 #        NM.add(node)
 #NM.connectNodes()
