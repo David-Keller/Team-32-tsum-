@@ -39,7 +39,7 @@ class NodeSet:
                         if surroundingNode not in self.nodeList:
                                 self.add(surroundingNode)
         def display(self):
-                print("Node: ",end='')
+                print("Node: ", end='')
                 print(self)
                 print("Low: ",end='')
                 print(self.low)
@@ -92,7 +92,7 @@ class NodeSet:
 
 
 class NodeMap:
-        distanceThreshold = 1.5
+        distanceThreshold = 250
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
@@ -138,18 +138,32 @@ class NodeMap:
 
 
 timeA = time()
-NM = NodeMap()
-a = list()
-a.append(Node(0,0,"red", "a1"))
-a.append(Node(1,1,"red", "a2"))
-a.append(Node(2,1,"red", "a3"))
-a.append(Node(3,2,"red", "a4"))
-a.append(Node(3,0,"red", "a5"))
-a.append(Node(4,1,"red", "a6"))
-for node in a:
-        NM.add(node)
-NM.connectNodes()
-NM.formNodeSets()
+
+def createMap(self, inputMap):
+        thisMap = NodeMap()
+        for type in range(5):
+                for node in type:
+                        print(node)
+        thisMap.connectNodes()
+        thisMap.formNodeSets()
+        for nodeSet in thisMap.nodeSetList:
+                #REMOVE THIS
+                nodeSet.display()
+                for node in nodeSet.solveValue():
+                        print(node, end ='->')
+                print("")
+
+#a = list()
+#a.append(Node(0,0,"red", "a1"))
+#a.append(Node(1,1,"red", "a2"))
+#a.append(Node(2,1,"red", "a3"))
+#a.append(Node(3,2,"red", "a4"))
+#a.append(Node(3,0,"red", "a5"))
+#a.append(Node(4,1,"red", "a6"))
+#for node in a:
+#        NM.add(node)
+#NM.connectNodes()
+#NM.formNodeSets()
 #for z in NM.allNodes:
 #        print("Node: ", end='')
  #       print(z.name, end='')
@@ -162,11 +176,12 @@ NM.formNodeSets()
    #             print(za.name, end='')
    #     print('')
 
-for zb in NM.nodeSetList:
-        zb.display()
-        for node in  (zb.solveValue()):
-                print(node.name)
+#for zb in NM.nodeSetList:
+#        zb.display()
+#        for node in  (zb.solveValue()):
+#                print(node.name)
 #print("END")
 
 timeB =time()
+print("Elapsed Time: ", end='')
 print(timeB - timeA)
