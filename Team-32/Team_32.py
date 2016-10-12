@@ -2,63 +2,39 @@ import cv2
 import numpy as np
 import time
 
-first = cv2.imread('test4.png',1)
-start = time.time()
-seconds = 0
-count = 0
-while(True):
-    end = start
-    start = time.time()
+def findTsums( first ):
+    hight, width = first.shape[:2]
+    fx = 720/width
+    fy = 1280/hight
+    cv2.resize(first,None,fx = fx, fy = fy)
+    #end = start
+    #start = time.time()
     img = first.copy()
 
-    #temp = cv2.waitKey(0)
-    #img2 = img.copy()
     img3 = img.copy()
-    #img4 = img.copy()
-    #cv2.imshow('detected circleees',img3)
-    #temp = cv2.waitKey(0)
     #img = cv2.multiply(img,np.array([2.0]))
-    img = cv2.medianBlur(img,3)
-
-
-    #start = time.time()
-
 
     img = cv2.medianBlur(img,5)
     img = cv2.cvtColor(img,cv2.COLOR_RGB2GRAY)
-
-
     #this line is being honed in becuse it has to do with the criteria for detecting circles
     circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,50,
                                 param1=50,param2=12,minRadius=40,maxRadius=50)
-    circles = np.uint16(np.around(circles))
-
-
+    if(circles is  None):
+        return None
+    circles = np.uint16(np.around(circles.astype(np.double)))
 
     #cut down on the number of data sets to work with based on being out of bounds
     circle = []
     for i in circles[0,:]:
-        if((i[1] > 300) and (i[1] < 1000)): #the 300 and 1000 will need to be found dynamicaly
+        if((i[1] > 300) and (i[1] < 1000)): #TODO: the 300 and 1000 will need to be found dynamicaly
             circle.append(i)
-
-
 
     #grab the regons of interest
     roiFirst = []
-    for i in circle[0:]:
-        # draw the outer circle
-   
+    for i in circle[0:]:   
         roiFirst.append(img3[i[1]-(i[2]-10):(i[1]+(i[2])-10), i[0]-(i[2]-10):(i[0]+(i[2]-10))])
-        #cv2.imshow('contrast',roi)
-    
-        #cv2.circle(img3,(i[0],i[1]),i[2],(0,255,0),2)
-        #cv2.imshow('contrast',img3)
-        #cv2.waitKey(0)
 
-
-
-
-
+#TODO: clean up this loop and combine it with the previous loop
     #put a black circle mask over the regons of interest
     num = 0
     roi = []
@@ -67,16 +43,10 @@ while(True):
         temp = np.zeros((height,width), np.uint8)
         cv2.circle(temp,(int(height/2),int(width/2)),int((height-1)/2),1,-1)
         roi.append(cv2.bitwise_and(i, i, mask=temp))
-        #cv2.imshow('test' + str(num),masked_data)
-        #num = num + 1
-    #cv2.imshow('contrast',img3)
 
 
-
-
-
-    hist = []
     #calculate histograms
+    hist = []
     num = 0
     for i in roi:
         if(i is None):
@@ -86,49 +56,46 @@ while(True):
         hist.append((cv2.normalize(temp, temp).flatten(),num))
         num = num +1
 
-
-
     #histogram comparason and then sorting
     types = []
-    types.append([hist[0]])
-    for i in hist[1:]:
-        found = False
-        for j in types:
+    if(len(hist)>0):
+        types.append([hist[0]])
+        for i in hist[1:]:
+            found = False
+            for j in types:
+                temp = cv2.compareHist(i[0],j[0][0],method=0)
+                if(temp > .85):## this is the value that determins how close the histograms have to be
+                    j.append(i)
+                    found = True
+                    break   
+            if(found == False):
+                types.append([i])
 
-            temp = cv2.compareHist(i[0],j[0][0],method=0)
-            if(temp > .85):## this is the value that determins how close the histograms have to be
-                j.append(i)
-                found = True
-                break   
-        if(found == False):
-            types.append([i])
-                
-
-    #num = 1
-    #for i in types[4]:
-    #    cv2.imshow('test' + str(num),roi[i[1]])
-    #    num = num + 1
-
+    types.append(None)
+    types.append(None)
+    types.append(None)
+    types.append(None)
 
 
-
-    for i in types[0][:]:
-        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,0,0),2)
-
-    for i in types[1][:]:
-        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,0,128),2)
-
-    for i in types[2][:]:
-        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,0,255),2)
-
-    for i in types[3][:]:
-        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,128,128),2)
-
-    for i in types[4][:]:
-        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,65,128),2)
-
-    for i in types[5][:]:
-        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,65,255),2)
+#TODO: remove any lists from types that are less than 3 in length
+    if(types[0] != None):
+        for i in types[0][:]:
+            cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,0,0),2)
+        if(types[1] != None):
+            for i in types[1][:]:
+                cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,0,128),2)
+            if(types[2] != None):
+                for i in types[2][:]:
+                    cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,0,255),2)
+                if(types[3] != None):
+                    for i in types[3][:]:
+                        cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(255,128,128),2)
+                    if(types[4] != None):
+                        for i in types[4][:]:
+                            cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,65,128),2)
+                        if(types[5] != None):
+                            for i in types[5][:]:
+                                cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,65,255),2)
 
     #for i in types[6][:]:
     #    cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(65,150,128),2)
@@ -136,55 +103,40 @@ while(True):
     #for i in types[7][:]:
     #    cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,0,200),2)
 
+    types[:] = [x for x in types if(x != None) if len(x) > 3]
 
-    #end = time.time()
-    #print(end - start)
+    for(i in types):
+        for(j in i):
+            j = circle[j[1]]
+
 
     cv2.imshow('contrast',img3)
-    seconds = seconds +(start - end)
-    count = count + 1
-    if(seconds > 1):
-        seconds = seconds - 1
-        print(count)
-        count = 0
     cv2.waitKey(1)
-
-
-cv2.destroyAllWindows()
-
+    return types
 
 
 
 
 
+cap = cv2.VideoCapture(0)
+ret, frame = cap.read()
+ret = cap.set(4,1080)
+ret = cap.set(3,1920)
 
-#import numpy as np
-#import cv2
-#import time
-
-#cap = cv2.VideoCapture(0)
-#ret = cap.set(3,1280)
-#print(ret)
-#ret = cap.set(4,720)
-#print(ret)
-#seconds = 0
-#count = 0
-#start = time.time()
-#while(True):
-#    # Capture frame-by-frame
+while(True):
 #    end = start
 #    start = time.time()
     
-#    ret, frame = cap.read()
-#    #print(frame.shape[:2])
+    ret, frame = cap.read() 
+    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
+    im = np.rot90(im)
+    tsumList = findTsums(im)
     
-#    #frame = np.rot90(frame)
-
-#    # Our operations on the frame come here
-#   # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
 
 #    # Display the resulting frame
-#    cv2.imshow('frame',frame)
+    cv2.imshow('frame',frame)
+    cv2.imshow('im', im)
     
 
 #    seconds = seconds +(start - end)
@@ -193,9 +145,10 @@ cv2.destroyAllWindows()
 #        seconds = seconds - 1
 #        print(count)
 #        count = 0
-#    if cv2.waitKey(1) & 0xFF == ord('q'):
-#        break
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 ## When everything done, release the capture
-#cap.release()
-#cv2.destroyAllWindows()
+cap.release()
+cv2.destroyAllWindows()
+
