@@ -22,14 +22,17 @@ while(True):
     im = np.rot90(im)
     tsumList = findTsums(im)
 
-    solvedList = createMap(tsumList)
-    #solvedList.node
+    solvedList = createMap(tsumList[0])
+    if(solvedList is not None):
+        print(str(len(solvedList)))
+        for x in range(len(solvedList)-1):
+            cv2.line(tsumList[1],(solvedList[x].x,solvedList[x].y),(solvedList[x+1].x,solvedList[x+1].y), (0,255,0),5)
     
     cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
 
 #    # Display the resulting frame
     cv2.imshow('frame',frame)
-    #cv2.imshow('im', im)
+    cv2.imshow('im', tsumList[1])
     
 
     seconds = seconds +(start - end)

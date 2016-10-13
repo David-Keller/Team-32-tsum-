@@ -156,7 +156,7 @@ def createMap(inputMap):
                             print(node.name, end ='->')
                     print("")
                     return solvedPath
-                return None
+                return []
 
 #tsums = list()
 #tsums.append([5,8,1])
