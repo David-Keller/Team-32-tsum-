@@ -105,8 +105,8 @@ def findTsums( first ):
 
     types[:] = [x for x in types if(x != None) if len(x) > 3]
 
-    for(i in types):
-        for(j in i):
+    for i in types:
+        for j in i:
             j = circle[j[1]]
 
 
@@ -122,10 +122,10 @@ cap = cv2.VideoCapture(0)
 ret, frame = cap.read()
 ret = cap.set(4,1080)
 ret = cap.set(3,1920)
-
+start = time.time()
 while(True):
-#    end = start
-#    start = time.time()
+    end = start
+    start = time.time()
     
     ret, frame = cap.read() 
     im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
@@ -139,12 +139,12 @@ while(True):
     cv2.imshow('im', im)
     
 
-#    seconds = seconds +(start - end)
-#    count = count + 1
-#    if(seconds > 1):
-#        seconds = seconds - 1
-#        print(count)
-#        count = 0
+    seconds = seconds +(start - end)
+    count = count + 1
+    if(seconds > 1):
+        seconds = seconds - 1
+        print(count)
+        count = 0
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
