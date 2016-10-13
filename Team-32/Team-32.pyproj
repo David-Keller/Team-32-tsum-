@@ -22,6 +22,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="solveGraph.py" />
     <Compile Include="Team_32.py" />
   </ItemGroup>
   <PropertyGroup>
