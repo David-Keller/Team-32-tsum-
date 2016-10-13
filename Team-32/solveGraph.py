@@ -102,7 +102,8 @@ class NodeMap:
                         i = i + 1
                         for checkNode in self.allNodes[i:]:
                                 if (node.color == checkNode.color and node != checkNode and checkNode not in node.connectedNodes):
-                                        distance = math.sqrt((abs(node.x - checkNode.x) **2 + abs(node.y - checkNode.y)** 2))
+                                        #print(str(node.x)+ "    " + str(node.y))
+                                        distance = math.sqrt(abs(float(node.x - checkNode.x)) **2 + abs(float(node.y - checkNode.y))** 2)
                                         if distance <= NodeMap.distanceThreshold:
                                                 node.connectNode(checkNode)
         def formNodeSets(self):
@@ -140,7 +141,7 @@ timeA = time.time()
 def createMap(inputMap):
         thisMap = NodeMap()
         #FIX check for empty lists
-        for type in range(5):
+        for type in range(len(inputMap)):
                 thisType = inputMap[type]
                 for node in thisType:
                         thisMap.add(Node(node[0],node[1], type, str(node[0]) + " " + str(node[1])))
@@ -149,10 +150,13 @@ def createMap(inputMap):
         for nodeSet in thisMap.nodeSetList:
                 #REMOVE THIS
 #                nodeSet.display()
-#                solvedPath =nodeSet.solveValue() 
-                for node in nodeSet.solveValue():
-                        print(node.name, end ='->')
-                print("")
+                solvedPath =nodeSet.solveValue()
+                if(solvedPath is not None):
+                    for node in solvedPath:
+                            print(node.name, end ='->')
+                    print("")
+                    return solvedPath
+                return None
 
 #tsums = list()
 #tsums.append([5,8,1])
