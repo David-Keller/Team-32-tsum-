@@ -11,6 +11,8 @@ ret, frame = cap.read()
 ret = cap.set(4,1080)
 ret = cap.set(3,1920)
 start = time.time()
+seconds = 0.0
+count = 0;
 while(True):
     end = start
     start = time.time()
@@ -31,7 +33,7 @@ while(True):
     count = count + 1
     if(seconds > 1):
         seconds = seconds - 1
-        print(count)
+        #print(count)
         count = 0
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break

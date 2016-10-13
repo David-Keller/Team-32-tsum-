@@ -1,17 +1,16 @@
 import cv2
 import numpy as np
-import time
+#import time
 
 def findTsums( first ):
     hight, width = first.shape[:2]
     fx = 720/width
     fy = 1280/hight
     cv2.resize(first,None,fx = fx, fy = fy)
-    #end = start
-    #start = time.time()
+
     img = first.copy()
 
-    img3 = img.copy()
+    img3 = first.copy()
     #img = cv2.multiply(img,np.array([2.0]))
 
     img = cv2.medianBlur(img,5)
@@ -26,21 +25,23 @@ def findTsums( first ):
     #cut down on the number of data sets to work with based on being out of bounds
     circle = []
     for i in circles[0,:]:
-        if((i[1] > 300) and (i[1] < 1000)): #TODO: the 300 and 1000 will need to be found dynamicaly
+        if((i[1] > 300) and (i[1] < 1000) and not (i[0] < i[2])): #TODO: the 300 and 1000 will need to be found dynamicaly
             circle.append(i)
 
     #grab the regons of interest
     roiFirst = []
-    for i in circle[0:]:   
-        roiFirst.append(img3[i[1]-(i[2]-10):(i[1]+(i[2])-10), i[0]-(i[2]-10):(i[0]+(i[2]-10))])
+    for i in circle[0:]:
+        roiFirst.append(img3[i[1]-(i[2]-2):(i[1]+(i[2])-2), i[0]-(i[2]-2):(i[0]+(i[2]-2))])
 
 #TODO: clean up this loop and combine it with the previous loop
     #put a black circle mask over the regons of interest
-    num = 0
+    #num = 0
     roi = []
     for i in roiFirst:
+
         height, width, depth = i.shape
         temp = np.zeros((height,width), np.uint8)
+        
         cv2.circle(temp,(int(height/2),int(width/2)),int((height-1)/2),1,-1)
         roi.append(cv2.bitwise_and(i, i, mask=temp))
 
@@ -50,7 +51,7 @@ def findTsums( first ):
     num = 0
     for i in roi:
         if(i is None):
-            print("None error")
+        #    print("None error")
             continue
         temp = cv2.calcHist([i],[0,1,2], None,[8,8,8], [0,256,0,256,0,256])
         hist.append((cv2.normalize(temp, temp).flatten(),num))
@@ -72,9 +73,7 @@ def findTsums( first ):
                 types.append([i])
 
     types.append(None)
-    types.append(None)
-    types.append(None)
-    types.append(None)
+
 
 
 #TODO: remove any lists from types that are less than 3 in length
@@ -112,4 +111,5 @@ def findTsums( first ):
 
     cv2.imshow('contrast',img3)
     cv2.waitKey(1)
+    print(str(len(types)))
     return types

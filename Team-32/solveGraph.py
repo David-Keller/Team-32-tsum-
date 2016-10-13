@@ -1,5 +1,5 @@
 import math
-from time import time
+import time
 class Node:
         def __init__(self, x, y, color, name):
                 self.name = name
@@ -135,7 +135,7 @@ class NodeMap:
 #40 tsums
 
 
-timeA = time()
+timeA = time.time()
 
 def createMap(inputMap):
         thisMap = NodeMap()
@@ -154,43 +154,43 @@ def createMap(inputMap):
                         print(node.name, end ='->')
                 print("")
 
-tsums = list()
-tsums.append([5,8,1])
-tsums.append([3,8,1])
-tsums.append([1,8,1])
-types = list([tsums,list(),list(),list(),list()])
-#fullMap = list([types])
-createMap(types)
-#a = list()
-#a.append(Node(0,0,"red", "a1"))
-#a.append(Node(1,1,"red", "a2"))
-#a.append(Node(2,1,"red", "a3"))
-#a.append(Node(3,2,"red", "a4"))
-#a.append(Node(3,0,"red", "a5"))
-#a.append(Node(4,1,"red", "a6"))
-#NM = NodeMap()
-#for node in a:
-#        NM.add(node)
-#NM.connectNodes()
-#NM.formNodeSets()
-#for z in NM.allNodes:
-#        print("Node: ", end='')
- #       print(z.name, end='')
-  #      print(": ", end='')
-   #     print(z)
-       # print(z.x)
-    #    print("x: " + str(z.x) + " y: " + str(z.y))
-     #   print("Nodes: ",end='')
-#        for za in z.connectedNodes:
-   #             print(za.name, end='')
-   #     print('')
+#tsums = list()
+#tsums.append([5,8,1])
+#tsums.append([3,8,1])
+#tsums.append([1,8,1])
+#types = list([tsums,list(),list(),list(),list()])
+##fullMap = list([types])
+#createMap(types)
+##a = list()
+##a.append(Node(0,0,"red", "a1"))
+##a.append(Node(1,1,"red", "a2"))
+##a.append(Node(2,1,"red", "a3"))
+##a.append(Node(3,2,"red", "a4"))
+##a.append(Node(3,0,"red", "a5"))
+##a.append(Node(4,1,"red", "a6"))
+##NM = NodeMap()
+##for node in a:
+##        NM.add(node)
+##NM.connectNodes()
+##NM.formNodeSets()
+##for z in NM.allNodes:
+##        print("Node: ", end='')
+# #       print(z.name, end='')
+#  #      print(": ", end='')
+#   #     print(z)
+#       # print(z.x)
+#    #    print("x: " + str(z.x) + " y: " + str(z.y))
+#     #   print("Nodes: ",end='')
+##        for za in z.connectedNodes:
+#   #             print(za.name, end='')
+#   #     print('')
 
-#for zb in NM.nodeSetList:
-#        zb.display()
-#        for node in  (zb.solveValue()):
-#                print(node.name)
-#print("END")
+##for zb in NM.nodeSetList:
+##        zb.display()
+##        for node in  (zb.solveValue()):
+##                print(node.name)
+##print("END")
 
-timeB =time()
-print("Elapsed Time: ", end='')
-print(timeB - timeA)
+#timeB =time()
+#print("Elapsed Time: ", end='')
+#print(timeB - timeA)
