@@ -11,20 +11,32 @@ type = { "57" : "ID",
 		
 interested_numbers = [0, 3]
 
+eventDevice = "/dev/input/event0"
+adb = "adb shell "
 
+def run(command):
+    print("running {}{}".format(adb, command))
+    return os.popen(adb + command).read()
 
-lines = open('geteventFile.txt').read().split('\n')
-output = ""
+def fromFile():
+    lines = open('event').read().split('\n')
+    output = ""
+    
+    for i in range(len(lines)):
+            e = lines[i].split(' ')
 
-for i in range(len(lines)):
-	e = lines[i].split(' ')
-	output += e[0] + " "
-	output += e[1] + " "
-	output += '{0:0>4}'.format(str(int(e[2], 16))) + " "
-	output += '{0:0>4}'.format(str(int(e[3], 16))) + " "
-	if int(e[1], 16) in interested_numbers:
-		output += type[str(int(e[2], 16))]
-	output += "\n"
+        #if int(e[0], 16) in interested_numbers:
+            line = "sendevent " + eventDevice + " "
+            line += e[0] + " "
+            line += '{0:0>4}'.format(str(int(e[1], 16))) + " "
+            line += '{0:0>4}'.format(str(int(e[2], 16))) + ""
 
-o = open('geteventFile_parsed.txt', 'w')
-o.write(output)
+            #line += " # " + type[str(int(e[2], 16))]
+        #    output += type[str(int(e[2], 16))]
+            output += line
+            output += "\n"
+
+    o = open('event_parsed', 'w')
+    o.write(output)
+
+fromFile()

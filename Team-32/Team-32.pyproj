@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>897f6750-f4b7-4859-8ad9-175c650ac24a</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Team_32.py</StartupFile>
+    <StartupFile>ADBSwipe.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -22,7 +22,12 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Team_32.py" />
+    <Compile Include="ADBSwipe.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParseGetEvent.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
