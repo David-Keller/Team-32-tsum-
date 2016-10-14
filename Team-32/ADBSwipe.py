@@ -11,12 +11,15 @@ shell = "shell "
 adbShell = adb + shell
 
 def startTouch():
+    """ Returns the 'commands' to start a touch event """
     return "sendevent {device} 3 57 1337;sendevent {device} 1 330 1;sendevent {device} 1 325 1;".format(device = eventDevice)
 
 def endTouch():
+    """ Returns the 'commands' to end a touch event """
     return "sendevent {device} 3 57 4294967295;sendevent {device} 1 330 0;sendevent {device} 1 325 0;sendevent {device} 0 0 0;".format(device = eventDevice)
 
 def swipe(coords):
+    """ Takes a list of coords. [(x,y), (x,y), (x,y)]. and Returns the 'commands' that touch at those locations """
     commands = ""
     for coord in coords:
         commands += "sendevent {device} 3 53 {x};sendevent {device} 3 54 {y};sendevent {device} 0 0 0;".format(device = eventDevice, x = coord[0], y = coord[1])
@@ -59,16 +62,16 @@ def getScreenSize():
     return output
 
 def sleep(time=.5):
+    """ Tell android script to pause/sleep """
     return "sleep {};".format(time)
 
-def multiSwipe(listOfSwipes):
-
-    return
-
 class Command:
+    """ Helper class to abstract away the appending of commands onto a longer command string """
     commandString = ""
 
     def add(self, command):
+        if type(command) is Command:
+            command = command.str()
         self.commandString += str(command)
     def str(self):
         return self.commandString
@@ -76,33 +79,43 @@ class Command:
         self.commandString = ""
 
 """
-[(x1,y1), (x2, y2), (x3, y3)]
-
+tsumLoc = tsum location = (x,y)
+tsumGroup = list of tsum locations = [tsumLoc1, tsumLoc2, tsumLoc3]
+tsumGroups = list of tsum groups = [tsumGroup1, tsumGroup2, tsumGroup3] = [ [ (x,y), (x,y,) (x,y) ], [ (x,y), (x,y,) ], [ (x,y) ] ]
 """
+def swipeTsumGroups(tsumGroups):
+    """ Takes a list of Tsum Groups and swipes the different groups individually """
+    outputCmd = Command()
+    for tsumGroup in tsumGroups:
+        outputCmd.add(startTouch())
+        outputCmd.add(swipe(tsumGroup))
+        outputCmd.add(endTouch())
+    return run(outputCmd)
 
-cmd = Command()
 
-# wake device
-runSimple("input keyevent 26")
+if __name__ == '__main__':
+    """ For testing purposes """
+    cmd = Command()
 
-# swipe up
-cmd.add(startTouch())
-cmd.add(swipe(line((300, 2000), (900, 500), num=10)))
-cmd.add(endTouch())
+    # wake device
+    runSimple("input keyevent 26")
 
-cmd.add(sleep())
+    # swipe up
+    cmd.add(swipeTsumGroups([line((300, 2000), (900, 500), num=10), [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ]]))
 
-# lock code
-cmd.add(startTouch())
-# bottom row
-cmd.add(swipe(line((340, 2100), (1100, 2000))))
-# up one
-cmd.add(swipe(line((1100, 2000), (1120, 1700))))
-# up left
-cmd.add(swipe(line((1120, 1700), (700, 1300))))
-cmd.add(endTouch())
+    # swipe up
+    #cmd.add(startTouch())
+    #cmd.add(swipe(line((300, 2000), (900, 500), num=10)))
+    #cmd.add(endTouch())
 
-run(cmd)
+    #cmd.add(sleep())
+
+    # lock code
+    #cmd.add(startTouch())
+    #cmd.add(swipe( [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ] ))
+    #cmd.add(endTouch())
+
+    run(cmd)
 
 
 
