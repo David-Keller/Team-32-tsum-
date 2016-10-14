@@ -90,7 +90,7 @@ class NodeSet:
 
 
 class NodeMap:
-        distanceThreshold = 250
+        distanceThreshold = 200
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
@@ -150,13 +150,13 @@ def createMap(inputMap):
         for nodeSet in thisMap.nodeSetList:
                 #REMOVE THIS
 #                nodeSet.display()
-                solvedPath =nodeSet.solveValue()
+                solvedPath = nodeSet.solveValue()
                 if(solvedPath is not None):
                     for node in solvedPath:
                             print(node.name, end ='->')
                     print("")
-                    return solvedPath
-                return []
+        return thisMap
+                #return []
 
 #tsums = list()
 #tsums.append([5,8,1])

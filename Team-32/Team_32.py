@@ -24,9 +24,12 @@ while(True):
 
     solvedList = createMap(tsumList[0])
     if(solvedList is not None):
-        print(str(len(solvedList)))
-        for x in range(len(solvedList)-1):
-            cv2.line(tsumList[1],(solvedList[x].x,solvedList[x].y),(solvedList[x+1].x,solvedList[x+1].y), (0,255,0),5)
+        #print(str(len(solvedList)))
+        for nodeset in solvedList.nodeSetList:
+            solved = nodeset.solveValue()
+            if(solved is not None):
+                for x in range(len(solved)-1):
+                    cv2.line(tsumList[1],(solved[x].x,solved[x].y),(solved[x+1].x,solved[x+1].y), (0,255,0),5)
     
     cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
 
