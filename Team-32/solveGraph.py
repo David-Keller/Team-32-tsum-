@@ -105,8 +105,12 @@ class NodeSet:
 
 
 class NodeMap:
+<<<<<<< HEAD
         """Management class for all nodes."""
         distanceThreshold = 2
+=======
+        distanceThreshold = 200
+>>>>>>> refs/remotes/origin/master
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
@@ -215,6 +219,28 @@ class NodeMap:
 
 timeA = time.time()
 
+<<<<<<< HEAD
+=======
+def createMap(inputMap):
+        thisMap = NodeMap()
+        #FIX check for empty lists
+        for type in range(len(inputMap)):
+                thisType = inputMap[type]
+                for node in thisType:
+                        thisMap.add(Node(node[0],node[1], type, str(node[0]) + " " + str(node[1])))
+        thisMap.connectNodes()
+        thisMap.formNodeSets()
+        for nodeSet in thisMap.nodeSetList:
+                #REMOVE THIS
+#                nodeSet.display()
+                solvedPath = nodeSet.solveValue()
+                if(solvedPath is not None):
+                    for node in solvedPath:
+                            print(node.name, end ='->')
+                    print("")
+        return thisMap
+                #return []
+>>>>>>> refs/remotes/origin/master
 
 tsums = list()
 tsums.append([5,8,1])
