@@ -21,8 +21,9 @@ while(True):
     im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
     im = np.rot90(im)
     tsumList = findTsums(im)
-    if(tsumList is not None):
-        if(len(tsumList) >4):
+    if(tsumList[0] is not None):
+        length = len(tsumList[0])
+        if(length > 3):
             print("found all 5")
 
     solvedList = createMap(tsumList[0])
