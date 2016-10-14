@@ -95,14 +95,13 @@ def swipeTsumGroups(tsumGroups):
 
 if __name__ == '__main__':
     """ For testing purposes """
-    cmd = Command()
+    #cmd = Command()
 
     # wake device
     runSimple("input keyevent 26")
 
-    # swipe up
-    cmd.add(swipeTsumGroups([line((300, 2000), (900, 500), num=10), [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ]]))
-
+    # swipes
+    swipeTsumGroups([line((300, 2000), (900, 500), num=10), [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ]])
     # swipe up
     #cmd.add(startTouch())
     #cmd.add(swipe(line((300, 2000), (900, 500), num=10)))
@@ -115,10 +114,7 @@ if __name__ == '__main__':
     #cmd.add(swipe( [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ] ))
     #cmd.add(endTouch())
 
-    run(cmd)
-
-
-
+    #run(cmd)
 
 """
 Notes:
