@@ -17,7 +17,8 @@ while(True):
     end = start
     start = time.time()
     
-    ret, frame = cap.read() 
+    #ret, frame = cap.read() 
+    frame = imread('test_data.png',1)
     im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
     im = np.rot90(im)
     tsumList = findTsums(im)
