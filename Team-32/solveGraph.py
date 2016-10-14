@@ -81,6 +81,10 @@ class NodeSet:
                 return bestPath
                 
         def solveValue(self):
+                if len(self.nodeList) == 1:
+                        self.value = 1
+                        self.isPath = True
+                        return self.nodeList
                 """Finds the longest path in the entire nodeSet(between any two
                 points)"""
                 if self.isPath == True:
@@ -97,7 +101,9 @@ class NodeSet:
                                                 bestPath = thisPath
                                 else:
                                         bestPath = thisPath
+
                 self.nodeList = bestPath
+                #print(self.nodeList)
                 self.value = len(bestPath)
                 self.isPath = True
      
@@ -105,12 +111,8 @@ class NodeSet:
 
 
 class NodeMap:
-<<<<<<< HEAD
         """Management class for all nodes."""
         distanceThreshold = 2
-=======
-        distanceThreshold = 200
->>>>>>> refs/remotes/origin/master
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
@@ -118,15 +120,15 @@ class NodeMap:
                 self.allNodes.append(node)
         def createMap(self, inputMap):
                 """Creates and sets up a map of all nodes."""
-                print(inputMap)
-                print(self.nodeSetList)
+                #print(inputMap)
+                #print(self.nodeSetList)
                 #Create node map and add all nodes to it.
+                typeIndex = 0
                 for thisType in inputMap:
                         for node in thisType:
-                                self.add(Node(node[0],node[1], thisType, str(node[0]) + " " + str(node[1])))
-                
+                                self.add(Node(node[0],node[1], typeIndex, str(node[0]) + " " + str(node[1])))
+                        typeIndex = typeIndex + 1
                 i = 0
-                print(self.nodeSetList)
                 for node in self.allNodes[:]:
                         i = i + 1
                         for checkNode in self.allNodes[i:]:
@@ -135,7 +137,6 @@ class NodeMap:
                                         if distance <= NodeMap.distanceThreshold:
                                                 node.connectNode(checkNode)
 
-                print(self.nodeSetList)
                 #for nodeSet in thisMap.nodeSetList:
                  #       solvedPath =nodeSet.solveValue()
                   #      if(solvedPath is not None):
@@ -144,12 +145,8 @@ class NodeMap:
                     #        print("")
                     #        return solvedPath
                     #    return []
-                print(self.nodeSetList)
                 #Deep copy node list into a new set.
                 unformedNodes = set(self.allNodes)
-                print("unformed nodes: ")
-                print(unformedNodes)
-                print(self.allNodes)
                 formedNodes = set()
                 #While there are still unformed nodes...
                 while unformedNodes:
@@ -161,33 +158,17 @@ class NodeMap:
                         nodeSet.add(node)
                         for node in nodeSet.nodeList:
                                 unformedNodes.remove(node)
-                print(self.nodeSetList)
-
-
-        def getNextPattern(self):
-                for nodeSet in self.nodeSetList:
-                        if not bestNodeSet:
-                               bestNodeSet = nodeSet 
-                        if nodeSet.value > bestNodeSet.value:
-                                bestNodeSet = nodeSet
-                        elif nodeSet.value == bestNodeSet.value:
-                                #If new node is closer to the top of the screen...
-                                if nodeSet.low < bestNodeSet.low:
-                                        bestNodeSet = nodeSet
-                return bestNodeSet
         def getAllPaths(self, paths=[]):
-                print(self.nodeSetList)
                 self.nodeSetList
                 if not self.nodeSetList:
                         return []
                 bestPath = None
                 for nodeSet in self.nodeSetList:
                         if bestPath == None:
-                                print("FIRST")
                                 nodeSet.solveValue()
                                 bestPath = nodeSet
                         if not nodeSet.isPath:
-                                if len(nodeSet) >= bestPath.value:
+                                if len(nodeSet.nodeList) >= bestPath.value:
                                         nodeSet.solveValue()
                                         if(nodeSet.value > bestPath.value):
                                                 bestPath = nodeSet
@@ -196,8 +177,6 @@ class NodeMap:
                                                         bestPath = nodeSet
                                 else:
                                         break
-        
-                print("Removing extra nodes")
                 #Remove all nodeSets above the low point
                 for nodeSet in list(self.nodeSetList):
                         if nodeSet.high <= bestPath.low:
@@ -209,7 +188,6 @@ class NodeMap:
                         fNode.append(node.y)
                         fPath.append(fNode)
                 paths.append(fPath)
-                print(fPath)
                 self.getAllPaths(paths)
                 return(paths)
         
@@ -217,40 +195,18 @@ class NodeMap:
 #40 tsums
 
 
-timeA = time.time()
+#timeA = time.time()
 
-<<<<<<< HEAD
-=======
-def createMap(inputMap):
-        thisMap = NodeMap()
-        #FIX check for empty lists
-        for type in range(len(inputMap)):
-                thisType = inputMap[type]
-                for node in thisType:
-                        thisMap.add(Node(node[0],node[1], type, str(node[0]) + " " + str(node[1])))
-        thisMap.connectNodes()
-        thisMap.formNodeSets()
-        for nodeSet in thisMap.nodeSetList:
-                #REMOVE THIS
-#                nodeSet.display()
-                solvedPath = nodeSet.solveValue()
-                if(solvedPath is not None):
-                    for node in solvedPath:
-                            print(node.name, end ='->')
-                    print("")
-        return thisMap
-                #return []
->>>>>>> refs/remotes/origin/master
 
-tsums = list()
-tsums.append([5,8,1])
-tsums.append([3,8,1])
-tsums.append([1,8,1])
-types = list([tsums,list(),list(),list(),list()])
+#tsums = list()
+#tsums.append([5,8,1])
+#tsums.append([3,8,1])
+#tsums.append([1,8,1])
+#types = list([tsums,list(),list(),list(),list()])
 ##fullMap = list([types])
-NM = NodeMap()
-NM.createMap(types)
-print(NM.getAllPaths())
+#NM = NodeMap()
+#NM.createMap(types)
+#print(NM.getAllPaths())
 ##a = list()
 ##a.append(Node(0,0,"red", "a1"))
 ##a.append(Node(1,1,"red", "a2"))

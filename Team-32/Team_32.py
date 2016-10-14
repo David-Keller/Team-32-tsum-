@@ -18,7 +18,7 @@ while(True):
     start = time.time()
     
     #ret, frame = cap.read() 
-    frame = imread('test_data.png',1)
+    frame = cv2.imread('test_data.png',1)
     im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
     im = np.rot90(im)
     tsumList = findTsums(im)
@@ -26,15 +26,29 @@ while(True):
         length = len(tsumList[0])
         if(length > 3):
             print("found all 5")
+#    print(tsumList[0])
 
-    solvedList = createMap(tsumList[0])
+    allTsums = list()
+    for thisType in range(len(tsumList[0])):
+        typeList = list()
+        for j in tsumList[0][thisType]:
+            thisTsum  = list()
+            thisTsum.append(j[0])
+            thisTsum.append(j[1])
+            thisTsum.append(thisType)
+            typeList.append(thisTsum)
+        allTsums.append(typeList)
+    myMap = NodeMap()
+    myMap.createMap(allTsums)
+    solvedList = myMap.getAllPaths()
+    print(solvedList)
     if(solvedList is not None):
         #print(str(len(solvedList)))
-        for nodeset in solvedList.nodeSetList:
-            solved = nodeset.solveValue()
-            if(solved is not None):
-                for x in range(len(solved)-1):
-                    cv2.line(tsumList[1],(solved[x].x,solved[x].y),(solved[x+1].x,solved[x+1].y), (0,255,0),5)
+        for path in solvedList:
+            #solved = nodeset.solveValue()
+            if(path is not None):
+                for x in range(len(path)-1):
+                    cv2.line(tsumList[1],(path[x].x,path[x].y),(path[x+1].x,path[x+1].y), (0,255,0),5)
     
     cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
 
