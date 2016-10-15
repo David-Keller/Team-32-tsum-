@@ -9,8 +9,8 @@ Coded by David Keller, Alex Alkire, and Peter Pommer
 
 Abstract:
 	
-	It 'plays' the Android game TsumTsum by 'looking' through a webcam to parse the game play area using OpenCV, and sends swipe events via adb and Androids GetEvent.
-	It uses circle detection to find the tsums on the screen, then uses histograms to detect and aggregate tsums of the same type, which is then passed to a solving algorithm that returns a list of groups of tsums to be swiped, which is then passed to a function that generates sends and runs those swipes to the Android device.
+	It 'plays' the Android game TsumTsum by 'looking' through a webcam to parse the game play area using OpenCV, and sends swipe events via adb and Android's GetEvent.
+	It uses circle detection to find the tsums on the screen, then uses histograms to detect and aggregate tsums of the same type, which is then passed to a solving algorithm that returns a list of groups of tsums to be swiped, which is then passed to a function that generates, sends, and runs those swipes to the Android device.
 
 How to run:
 	
@@ -24,7 +24,7 @@ How to run:
 	Plug in phone to the computer.
 	Run the TsumTsum game app on the phone
 	Run this program
-	Place the phone's screen infront of the computers webcam
+	Place the phone's screen in front of the computers webcam
 	Position the screen so it is in the green box
 	Done! Watch the game get played.
 
