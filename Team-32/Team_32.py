@@ -4,8 +4,7 @@ import time
 #import all user created functions and classes
 from solveGraph import *
 from findTsums import findTsums
-from ADBSwipe import *
-from ParseGetEvent import *
+import ADBSwipe
 
 
 
