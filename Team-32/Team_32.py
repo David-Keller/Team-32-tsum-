@@ -1,3 +1,4 @@
+# https://github.com/fireflyes/Team-32-tsum-
 import cv2
 import numpy as np
 import time
@@ -7,8 +8,10 @@ from findTsums import findTsums
 import ADBSwipe
 
 
+imageSize = [720, 1280]
+screenSize = ADBSwipe.getScreenSize()
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 ret, frame = cap.read()
 ret = cap.set(4,1080)
 ret = cap.set(3,1920)
@@ -19,11 +22,13 @@ while(True):
     end = start
     start = time.time()
     
-    #ret, frame = cap.read() 
-    frame = cv2.imread('test_data.png',1)
+    ret, frame = cap.read() 
+    #frame = cv2.imread('test_data.png',1)
     im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
     im = np.rot90(im)
     tsumList = findTsums(im)
+    if (tsumList is None):
+        continue
     if(tsumList[0] is not None):
         length = len(tsumList[0])
         if(length > 3):
@@ -43,6 +48,7 @@ while(True):
     myMap = NodeMap()
     myMap.createMap(allTsums)
     solvedList = myMap.getAllPaths()
+    ADBSwipe.swipeTsumGroups(solvedList)
     print(solvedList)
     if(solvedList is not None):
         for path in solvedList:
