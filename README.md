@@ -13,11 +13,14 @@ Abstract:
 	It uses circle detection to find the tsums on the screen, then uses histograms to detect and aggregate tsums of the same type, which is then passed to a solving algorithm that returns a list of groups of tsums to be swiped, which is then passed to a function that generates sends and runs those swipes to the Android device.
 
 How to run:
+	
 	Requirements:
+	
 		adb installed and added to $PATH
 		Android phone with 'wm'
 		Android phone plugged in via usb cable
 		Android phone with usb debugging enabled
+		
 	Plug in phone to the computer.
 	Run the TsumTsum game app on the phone
 	Run this program
@@ -26,6 +29,7 @@ How to run:
 	Done! Watch the game get played.
 
 Future work:
+
 	Auto discover screen and screen rotation
 	Multi touch swipes
 	Code optimizations
