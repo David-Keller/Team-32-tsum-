@@ -56,6 +56,8 @@ def line(*coords, num=2):
 def getScreenSize():
     """ Note this requires the android device to have wm """
     output = runSimple("wm size")
+    if not output:
+        return None
     output = output[:-1] # Remove the trailing newline
     output = output.split(": ")[1] # extract just the WidthxHeight
     output = output.split("x") # extract the width and height into a list
