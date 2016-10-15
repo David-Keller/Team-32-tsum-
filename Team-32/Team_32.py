@@ -4,6 +4,9 @@ import time
 #import all user created functions and classes
 from solveGraph import *
 from findTsums import findTsums
+from ADBSwipe import *
+from ParseGetEvent import *
+
 
 
 cap = cv2.VideoCapture(0)
@@ -19,7 +22,7 @@ while(True):
     
     #ret, frame = cap.read() 
     frame = cv2.imread('test_data.png',1)
-    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
+    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
     im = np.rot90(im)
     tsumList = findTsums(im)
     if(tsumList[0] is not None):
@@ -43,9 +46,7 @@ while(True):
     solvedList = myMap.getAllPaths()
     print(solvedList)
     if(solvedList is not None):
-        #print(str(len(solvedList)))
         for path in solvedList:
-            #solved = nodeset.solveValue()
             if(path is not None):
                 for x in range(len(path)-1):
                     cv2.line(tsumList[1],(path[x].x,path[x].y),(path[x+1].x,path[x+1].y), (0,255,0),5)

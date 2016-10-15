@@ -25,7 +25,7 @@ def findTsums( first ):
     #cut down on the number of data sets to work with based on being out of bounds
     circle = []
     for i in circles[0,:]:
-        if((i[1] > 300) and (i[1] < 1000) and not (i[0] < i[2])): #TODO: the 300 and 1000 will need to be found dynamicaly
+        if((i[1] > 300) and (i[1] < 1000) and not (i[0] < i[2])): #TODO: the 300 and 1000 will need to be found dynamicaly """ change this to set radus (i[2]) equal to distance from edge(i[0]) """
             circle.append(i)
 
     #grab the regons of interest
