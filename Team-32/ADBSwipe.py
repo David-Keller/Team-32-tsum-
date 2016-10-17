@@ -4,7 +4,7 @@ import os
 from numpy import linspace
 
 locationToPushTo = "/data/local/tmp/"
-eventDevice = "/dev/input/event0"
+eventDevice = "/dev/input/event2"
 
 adb = "adb "
 shell = "shell "
@@ -22,7 +22,7 @@ def swipe(coords):
     """ Takes a list of coords. [(x,y), (x,y), (x,y)]. and Returns the 'commands' that touch at those locations """
     commands = ""
     for coord in coords:
-        commands += "sendevent {device} 3 53 {x};sendevent {device} 3 54 {y};sendevent {device} 0 0 0;".format(device = eventDevice, x = coord[0], y = coord[1])
+        commands += "sendevent {device} 3 53 {x};sendevent {device} 3 54 {y};sendevent {device} 0 0 0;".format(device = eventDevice, x = coord[0]*2, y = coord[1]*2)
     return commands
 
 def run(command):
@@ -49,8 +49,8 @@ def runSimple(command):
 
 def line(*coords, num=2):
     """ Given 2 (x, y) coords, returns a list of coords that draws a line between the two including the ends """
-    xs = linspace(coords[0][0], coords[1][0], num=num, dtype=int)
-    ys = linspace(coords[0][1], coords[1][1], num=num, dtype=int)
+    xs = linspace(coords[0][0]*2, coords[1][0]*2, num=num, dtype=int)
+    ys = linspace(coords[0][1]*2, coords[1][1]*2, num=num, dtype=int)
     return list(zip(xs, ys))
 
 def getScreenSize():

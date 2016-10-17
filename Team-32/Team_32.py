@@ -18,6 +18,7 @@ ret = cap.set(3,1920)
 start = time.time()
 seconds = 0.0
 count = 0
+shouldtap = False
 while(True):
     end = start
     start = time.time()
@@ -48,14 +49,15 @@ while(True):
     myMap = NodeMap()
     myMap.createMap(allTsums)
     solvedList = myMap.getAllPaths()
-    ADBSwipe.swipeTsumGroups(solvedList)
+    # solvedList = transform(solvedList)
     print(solvedList)
+    """
     if(solvedList is not None):
         for path in solvedList:
             if(path is not None):
                 for x in range(len(path)-1):
                     cv2.line(tsumList[1],(path[x].x,path[x].y),(path[x+1].x,path[x+1].y), (0,255,0),5)
-    
+    """
     cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
 
 #    # Display the resulting frame
@@ -69,8 +71,12 @@ while(True):
         seconds = seconds - 1
         #print(count)
         count = 0
-    if cv2.waitKey(200) & 0xFF == ord('q'):
-        break
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        shouldtap = True
+    if(shouldtap == True):
+        #ADBSwipe.swipeTsumGroups(solvedList[0])
+        shouldtap = False
+        cv2.waitKey(3*1000)
 
 ## When everything done, release the capture
 cap.release()
