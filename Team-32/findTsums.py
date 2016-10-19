@@ -21,7 +21,7 @@ def findTsums( first ):
                                 param1=50,param2=12,minRadius=40,maxRadius=50)
     if(circles is  None):
         return None
-    circles = np.uint32(np.around(circles.astype(np.double)))
+    circles = np.int32(np.around(circles.astype(np.double)))
 
     #cut down on the number of data sets to work with based on being out of bounds
     circle = []

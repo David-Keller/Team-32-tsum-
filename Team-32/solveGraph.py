@@ -134,9 +134,10 @@ class NodeMap:
                         i = i + 1
                         for checkNode in self.allNodes[i:]:
                                 if (node.color == checkNode.color and node != checkNode and checkNode not in node.connectedNodes):
-                                        distance = math.sqrt(abs(float(node.x - checkNode.x)) **2 + abs(float(node.y - checkNode.y))** 2)
-                                        if distance <= NodeMap.distanceThreshold:
-                                                node.connectNode(checkNode)
+                                        if (abs(float(node.x - checkNode.x))) > NodeMap.distanceThreshold or (abs(float(node.y - checkNode.y))) > NodeMap.distanceThreshold:
+                                                distance = math.sqrt(abs(float(node.x - checkNode.x)) **2 + abs(float(node.y - checkNode.y))** 2)
+                                                if distance <= NodeMap.distanceThreshold:
+                                                        node.connectNode(checkNode)
 
                 #for nodeSet in thisMap.nodeSetList:
                  #       solvedPath =nodeSet.solveValue()
@@ -160,7 +161,9 @@ class NodeMap:
                         for node in nodeSet.nodeList:
                                 if node in unformedNodes:
                                         unformedNodes.remove(node)
-        def getAllPaths(self, paths=[]):
+        def getAllPaths(self, paths=None):
+                if paths == None:
+                        paths = []
                 self.nodeSetList
                 if not self.nodeSetList:
                         return []
