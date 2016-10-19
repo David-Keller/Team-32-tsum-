@@ -119,6 +119,9 @@ class NodeMap:
                 self.nodeSetList = set()
         def add(self, node):
                 self.allNodes.append(node)
+        def Clear(self):
+            self.allNodes = []
+            self.nodeSetList = set()
         def createMap(self, inputMap):
                 """Creates and sets up a map of all nodes."""
                 #print(inputMap)
@@ -191,6 +194,11 @@ class NodeMap:
                         fPath.append(fNode)
                 paths.append(fPath)
                 self.getAllPaths(paths)
+
+
+                #paths isnt getting reset...
+                #passback = paths
+                #paths = []
                 return(paths)
         
         

@@ -109,8 +109,8 @@ def findTsums( first ):
             i[j] = circle[i[j][1]]
 
 
-    cv2.imshow('contrast',img3)
+    #cv2.imshow('contrast',img3)
     #first = img3.copy()
-    cv2.waitKey(1)
+    #cv2.waitKey(1)
     #print(str(len(types)))
     return [types, img3]
