@@ -113,7 +113,7 @@ class NodeSet:
 
 class NodeMap:
         """Management class for all nodes."""
-        distanceThreshold = 145
+        distanceThreshold = 170
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
@@ -137,7 +137,11 @@ class NodeMap:
                         i = i + 1
                         for checkNode in self.allNodes[i:]:
                                 if (node.color == checkNode.color and node != checkNode and checkNode not in node.connectedNodes):
-                                        distance = math.sqrt(abs(float(node.x - checkNode.x)) **2 + abs(float(node.y - checkNode.y))** 2)
+                                        xVal = abs(node.x - checkNode.x)
+                                        xVal = xVal * xVal   
+                                        yVal = abs(node.y - checkNode.y)
+                                        yVal = yVal * yVal
+                                        distance = math.sqrt( xVal + yVal)
                                         if distance <= NodeMap.distanceThreshold:
                                                 node.connectNode(checkNode)
 
