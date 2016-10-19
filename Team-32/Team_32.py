@@ -1,27 +1,35 @@
+# https://github.com/fireflyes/Team-32-tsum-
 import cv2
 import numpy as np
 import time
 #import all user created functions and classes
 from solveGraph import *
 from findTsums import findTsums
+import ADBSwipe
 
 
-cap = cv2.VideoCapture(0)
+imageSize = [720, 1280]
+screenSize = ADBSwipe.getScreenSize()
+
+cap = cv2.VideoCapture(1)
 ret, frame = cap.read()
 ret = cap.set(4,1080)
 ret = cap.set(3,1920)
 start = time.time()
 seconds = 0.0
 count = 0
+shouldtap = False
 while(True):
     end = start
     start = time.time()
     
-    #ret, frame = cap.read() 
-    frame = cv2.imread('test_data.png',1)
-    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up on im
+    ret, frame = cap.read() 
+    #frame = cv2.imread('test_data.png',1)
+    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
     im = np.rot90(im)
     tsumList = findTsums(im)
+    if (tsumList is None):
+        continue
     if(tsumList[0] is not None):
         length = len(tsumList[0])
         if(length > 3):
@@ -41,15 +49,15 @@ while(True):
     myMap = NodeMap()
     myMap.createMap(allTsums)
     solvedList = myMap.getAllPaths()
+    # solvedList = transform(solvedList)
     print(solvedList)
+    """
     if(solvedList is not None):
-        #print(str(len(solvedList)))
         for path in solvedList:
-            #solved = nodeset.solveValue()
             if(path is not None):
                 for x in range(len(path)-1):
                     cv2.line(tsumList[1],(path[x].x,path[x].y),(path[x+1].x,path[x+1].y), (0,255,0),5)
-    
+    """
     cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
 
 #    # Display the resulting frame
@@ -63,8 +71,12 @@ while(True):
         seconds = seconds - 1
         #print(count)
         count = 0
-    if cv2.waitKey(200) & 0xFF == ord('q'):
-        break
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        shouldtap = True
+    if(shouldtap == True):
+        #ADBSwipe.swipeTsumGroups(solvedList[0])
+        shouldtap = False
+        cv2.waitKey(3*1000)
 
 ## When everything done, release the capture
 cap.release()

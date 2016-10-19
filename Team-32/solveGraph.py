@@ -1,3 +1,4 @@
+# https://github.com/fireflyes/Team-32-tsum-
 import math
 import time
 
@@ -88,7 +89,7 @@ class NodeSet:
                 """Finds the longest path in the entire nodeSet(between any two
                 points)"""
                 if self.isPath == True:
-                        return self.NodeList
+                        return self.nodeList
                 bestPath = None
                 for startNode in self.nodeList:
                         destinationNodeSet = set(self.nodeList)
@@ -112,7 +113,7 @@ class NodeSet:
 
 class NodeMap:
         """Management class for all nodes."""
-        distanceThreshold = 2
+        distanceThreshold = 145
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
@@ -157,7 +158,8 @@ class NodeMap:
                         unformedNodes.add(node)
                         nodeSet.add(node)
                         for node in nodeSet.nodeList:
-                                unformedNodes.remove(node)
+                                if node in unformedNodes:
+                                        unformedNodes.remove(node)
         def getAllPaths(self, paths=[]):
                 self.nodeSetList
                 if not self.nodeSetList:
