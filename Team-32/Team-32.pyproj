@@ -31,6 +31,9 @@
     <Compile Include="findTsums.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="screenCorrection.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="solveGraph.py" />
     <Compile Include="Team_32.py" />
   </ItemGroup>
