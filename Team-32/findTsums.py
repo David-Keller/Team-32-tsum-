@@ -21,7 +21,7 @@ def findTsums( first ):
                                 param1=50,param2=12,minRadius=40,maxRadius=50)
     if(circles is  None):
         return None
-    circles = np.uint32(np.around(circles.astype(np.double)))
+    circles = np.int32(np.around(circles.astype(np.double)))
 
     #cut down on the number of data sets to work with based on being out of bounds
     circle = []
@@ -97,20 +97,14 @@ def findTsums( first ):
                             for i in types[5][:]:
                                 cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,65,255),2)
 
-    #for i in types[6][:]:
-    #    cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(65,150,128),2)
-
-    #for i in types[7][:]:
-    #    cv2.circle(img3,(circle[i[1]][0],circle[i[1]][1]),circle[i[1]][2],(0,0,200),2)
-
     types = [x for x in types if(x != None) if len(x) > 3]
     for i in types:
         for j in range(len(i)):
             i[j] = circle[i[j][1]]
 
 
-    cv2.imshow('contrast',img3)
+    #cv2.imshow('contrast',img3)
     #first = img3.copy()
-    cv2.waitKey(1)
+    #cv2.waitKey(1)
     #print(str(len(types)))
     return [types, img3]

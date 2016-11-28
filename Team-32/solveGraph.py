@@ -113,12 +113,15 @@ class NodeSet:
 
 class NodeMap:
         """Management class for all nodes."""
-        distanceThreshold = 145
+        distanceThreshold = 170
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
         def add(self, node):
                 self.allNodes.append(node)
+        def Clear(self):
+            self.allNodes = []
+            self.nodeSetList = set()
         def createMap(self, inputMap):
                 """Creates and sets up a map of all nodes."""
                 #print(inputMap)
@@ -134,7 +137,11 @@ class NodeMap:
                         i = i + 1
                         for checkNode in self.allNodes[i:]:
                                 if (node.color == checkNode.color and node != checkNode and checkNode not in node.connectedNodes):
-                                        distance = math.sqrt(abs(float(node.x - checkNode.x)) **2 + abs(float(node.y - checkNode.y))** 2)
+                                        xVal = abs(node.x - checkNode.x)
+                                        xVal = xVal * xVal   
+                                        yVal = abs(node.y - checkNode.y)
+                                        yVal = yVal * yVal
+                                        distance = math.sqrt( xVal + yVal)
                                         if distance <= NodeMap.distanceThreshold:
                                                 node.connectNode(checkNode)
 
@@ -191,6 +198,11 @@ class NodeMap:
                         fPath.append(fNode)
                 paths.append(fPath)
                 self.getAllPaths(paths)
+
+
+                #paths isnt getting reset...
+                #passback = paths
+                #paths = []
                 return(paths)
         
         
