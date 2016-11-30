@@ -1,18 +1,28 @@
 import cv2
 import numpy as np
 
+def colorfilter(colorChange, lower, upper, i1, i2):
+    mask = cv2.inRange(colorChange,lower,upper)
+    kernel = np.ones((4,4),np.uint8)
+    errode = cv2.erode(mask,kernel, iterations = i1)
+    errode = cv2.dilate(errode,kernel, iterations = i2)
+    return errode
+
 def screenCorrection(im):
     colorChange = im.copy()
     colorChange = cv2.cvtColor(colorChange,cv2.COLOR_BGR2HSV)
-    #lower = np.array([10,100,100])
-    #upper = np.array([28,255,255])
-    lower = np.array([101,50,50])
-    upper = np.array([119,255,255])
-    mask = cv2.inRange(colorChange,lower,upper)
-    kernel = np.ones((4,4),np.uint8)
-    errode = cv2.erode(mask,kernel, iterations = 1)
-    errode = cv2.dilate(errode,kernel, iterations = 9)
+    Olower = np.array([10,100,100])
+    Oupper = np.array([28,255,255])
+    Blower = np.array([101,50,50])
+    Bupper = np.array([119,255,255])
+    #mask = cv2.inRange(colorChange,Blower,Bupper)
+    #kernel = np.ones((4,4),np.uint8)
+    #errode = cv2.erode(mask,kernel, iterations = 1)
+    #errode = cv2.dilate(errode,kernel, iterations = 9)
+    errode = colorfilter(colorChange,Blower, Bupper,1,9)
     im2, contours, hierarchy = cv2.findContours(errode.copy(),cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+    Oerrode = colorfilter(colorChange,Olower,Oupper,1,1)
     
     areas = []
     num = 0
