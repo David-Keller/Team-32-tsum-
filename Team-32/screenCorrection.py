@@ -6,12 +6,12 @@ def screenCorrection(im):
     colorChange = cv2.cvtColor(colorChange,cv2.COLOR_BGR2HSV)
     #lower = np.array([10,100,100])
     #upper = np.array([28,255,255])
-    lower = np.array([100,50,50])
-    upper = np.array([120,255,255])
+    lower = np.array([101,50,50])
+    upper = np.array([119,255,255])
     mask = cv2.inRange(colorChange,lower,upper)
     kernel = np.ones((4,4),np.uint8)
     errode = cv2.erode(mask,kernel, iterations = 1)
-    errode = cv2.dilate(errode,kernel, iterations = 8)
+    errode = cv2.dilate(errode,kernel, iterations = 9)
     im2, contours, hierarchy = cv2.findContours(errode.copy(),cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
     
     areas = []
@@ -26,7 +26,16 @@ def screenCorrection(im):
     #im = cv2.drawContours(im,[contours[areas[2][1]]],-1,(255,127,0),5)
     x,y,w,h = cv2.boundingRect(tec)
     cv2.rectangle(im,(x,y), (x+w, y+h),(0,255,0), 2)
-    
+    rect = []
+    for i in contours:
+        rect.append(cv2.boundingRect(i))
+    greaterthan = []
+    for i in rect:
+        if(i[0] < x and i[3] >175):
+            greaterthan.append(i)
+   
+    for i in greaterthan:
+        cv2.rectangle(im,(i[0],i[1]), (i[0]+i[2], i[1]+i[3]),(200,255,0), 2) 
     #rect = cv2.minAreaRect(tec)
     #box = cv2.boxPoints(rect)
     #box = np.int0(box)
