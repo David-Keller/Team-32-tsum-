@@ -6,9 +6,9 @@ import serial
 
 
 def listCOMPorts():
-	return serial.tools.list_ports.comports()
+	return [str(ports) for ports in serial.tools.list_ports.comports()]
 	
-class TeensySerial:
+class TeensySerialMouse:
 	def delay(self):
 		# time.sleep(0.2) # a sleep to play around with if needed
 		pass
@@ -18,19 +18,25 @@ class TeensySerial:
 		self.baud = 9600
 		self.DEBUG = False
 		
+	def setDEBUG(self, tf):
+		"""tf must be True or False"""
+		self.DEBUG = tf
+		
 	def port(self, COMport):
-	"""COMport is given as 'COM1', 'COM2', or 'COM3'"""
+		"""COMport is given as 'COM1', 'COM2', or 'COM3'"""
 		self.serial = serial.Serial(str(COMport), self.baud)
 		self.delay()
 		
 	def setScreenSize(self, x, y):
-		self.serial.write('a' + str(x) + ' ' + str(y) + 'z')
+		data = 'a' + str(x) + ' ' + str(y) + 'z'
+		self.serial.write(data.encode('utf-8'))
 		if self.DEBUG:
 			print('send set screen size: a', x, y, 'z')
 		self.delay()
 			
 	def mouseButton(self, flag):
-		self.serial.write('c' + str(flag) + 'z')
+		data = 'c' + str(flag) + 'z'
+		self.serial.write(data.encode('utf-8'))
 		if self.DEBUG:
 			if (flag):
 				print('send mouse down: c', flag, 'z')
@@ -39,7 +45,8 @@ class TeensySerial:
 		self.delay()
 		
 	def moveTo(self, x, y):
-		self.serial.write('b' + str(x) + ' ' + str(y) + 'z')
+		data = 'b' + str(x) + ' ' + str(y) + 'z'
+		self.serial.write(data.encode('utf-8'))
 		if self.DEBUG:
 			print('send mouse: b', x, y, 'z')
 		self.delay()
