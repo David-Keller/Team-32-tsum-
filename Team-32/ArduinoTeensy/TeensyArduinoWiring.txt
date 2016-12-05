@@ -1,0 +1,4 @@
+Teensy <--> Arduino
+ 8 (TX)      9 (RX)   
+ 7 (RX)     10 (TX)
+ GND         GND
