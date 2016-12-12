@@ -4,7 +4,7 @@ import os
 from numpy import linspace
 
 locationToPushTo = "/data/local/tmp/"
-eventDevice = "/dev/input/event2"
+eventDevice = "/dev/input/event0"
 
 adb = "adb "
 shell = "shell "
@@ -97,13 +97,17 @@ def swipeTsumGroups(tsumGroups):
 
 if __name__ == '__main__':
     """ For testing purposes """
-    #cmd = Command()
 
     # wake device
     runSimple("input keyevent 26")
 
+    import time
+    time.sleep(1)
+
     # swipes
     swipeTsumGroups([line((300, 2000), (900, 500), num=10), [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ]])
+    
+    #cmd = Command()
     # swipe up
     #cmd.add(startTouch())
     #cmd.add(swipe(line((300, 2000), (900, 500), num=10)))
@@ -116,7 +120,7 @@ if __name__ == '__main__':
     #cmd.add(swipe( [ (340, 2100), (1100, 2000), (1120, 1700), (700, 1300) ] ))
     #cmd.add(endTouch())
 
-    #run(cmd)
+    #runSimple(cmd)
 
 """
 Notes:
