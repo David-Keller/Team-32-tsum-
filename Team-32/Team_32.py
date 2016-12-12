@@ -53,9 +53,9 @@ while(True):
     start = time.time()
     
     ret, frame = cap.read() 
-    im = cv2.imread('test3.png',1)
-   # im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
-   # im = np.rot90(im)
+    #im = cv2.imread('test3.png',1)
+    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
+    im = np.rot90(im)
     tsumList = None
     tsumList = findTsums(im)
     #if(tsumList is None):
