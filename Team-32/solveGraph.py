@@ -29,23 +29,41 @@ class NodeSet:
                 self.nodeList = list()
                 self.isPath = False
         def add(self, node):
+                def linkNode(self, node):
+                        if node not in self.nodeList:
+                                self.nodeList.append(node)
+                                self.size = self.size + 1
+                                if self.low == -1:
+                                        self.low = node.y
+                                if self.high == -1:
+                                        self.high = node.y
+                                if node.y > self.low:
+                                        self.low = node.y
+                                if node.y < self.high:
+                                        self.high = node.y
+                        unlinkedNodes = list()
+                        for item in list(node.connectedNodes):
+                                if item not in self.nodeList:
+                                        unlinkedNodes.append(item)
+                        for cNode in unlinkedNodes:
+                                if cNode not in self.nodeList:
+                                        self.nodeList.append(cNode)
+                                        linkNode(self, cNode)
+                                        self.size = self.size + 1
+                                        if self.low == -1:
+                                                self.low = node.y
+                                        if self.high == -1:
+                                                self.high = node.y
+                                        if node.y > self.low:
+                                                self.low = node.y
+                                        if node.y < self.high:
+                                                self.high = node.y
+
                 """Adds a node and all connected nodes(by any number of links)
                 to this set."""
-                if node not in self.nodeList:
-                        self.size = self.size + 1
-                if self.low == -1:
-                        self.low = node.y
-                if self.high == -1:
-                        self.high = node.y
-                if node.y > self.low:
-                        self.low = node.y
-                if node.y < self.high:
-                        self.high = node.y
-                self.nodeList.append(node)
                 self.color = node.color
-                for surroundingNode in node.connectedNodes:
-                        if surroundingNode not in self.nodeList:
-                                self.nodeList.append(surroundingNode)
+                linkNode(self, node)
+                                
         def display(self):
                 """Display data about this nodeSet."""
                 print("Node: ", end='')
@@ -63,11 +81,13 @@ class NodeSet:
                 endNode"""
                 touchedNodeList.append(startNode)
                 bestPath = list()
+
                 #We found the end node; return path to it.
                 if startNode == endNode:
                         tempList= list(touchedNodeList)
                         touchedNodeList.remove(startNode)
                         return tempList
+
                 #Find maximum of all branching paths and return longest of these.
                 for node in (startNode.connectedNodes - set(touchedNodeList)):
                         tempList = self.findLongestPath(node, endNode, touchedNodeList)
@@ -75,6 +95,7 @@ class NodeSet:
                         if tempList != None: 
                                 if len(tempList) > len(bestPath):
                                         bestPath = list(tempList)                                              
+
                 #If none of the connecting nodes lead to end node..
                 touchedNodeList.remove(startNode)
                 if len(bestPath) == 0:
@@ -113,46 +134,42 @@ class NodeSet:
 
 class NodeMap:
         """Management class for all nodes."""
-        distanceThreshold = 170
+        distanceThreshold = 125
         def __init__(self):
                 self.allNodes = list()
                 self.nodeSetList = set()
         def add(self, node):
                 self.allNodes.append(node)
-        def Clear(self):
-            self.allNodes = []
-            self.nodeSetList = set()
+        def getAllConnections(self):
+                connections = list()
+                for nodeSet in self.nodeSetList:
+                        for node in nodeSet.nodeList:
+                                for cNode in node.connectedNodes:
+                                        connections.append([[node.x, node.y],[cNode.x,cNode.y]])
+                return connections
         def createMap(self, inputMap):
                 """Creates and sets up a map of all nodes."""
                 #print(inputMap)
                 #print(self.nodeSetList)
                 #Create node map and add all nodes to it.
                 typeIndex = 0
+                #Add each tsum to map based on type.
                 for thisType in inputMap:
                         for node in thisType:
                                 self.add(Node(node[0],node[1], typeIndex, str(node[0]) + " " + str(node[1])))
                         typeIndex = typeIndex + 1
                 i = 0
+
+                #Connect all nodes within specified distance that match type.
                 for node in self.allNodes[:]:
                         i = i + 1
                         for checkNode in self.allNodes[i:]:
                                 if (node.color == checkNode.color and node != checkNode and checkNode not in node.connectedNodes):
-                                        xVal = abs(node.x - checkNode.x)
-                                        xVal = xVal * xVal   
-                                        yVal = abs(node.y - checkNode.y)
-                                        yVal = yVal * yVal
-                                        distance = math.sqrt( xVal + yVal)
+                                        distance = math.sqrt(abs(float(node.x - checkNode.x)) **2 + abs(float(node.y - checkNode.y))** 2)
                                         if distance <= NodeMap.distanceThreshold:
                                                 node.connectNode(checkNode)
 
-                #for nodeSet in thisMap.nodeSetList:
-                 #       solvedPath =nodeSet.solveValue()
-                  #      if(solvedPath is not None):
-                   #         for node in solvedPath:
-                    #                print(node.name, end ='->')
-                    #        print("")
-                    #        return solvedPath
-                    #    return []
+
                 #Deep copy node list into a new set.
                 unformedNodes = set(self.allNodes)
                 formedNodes = set()
@@ -163,15 +180,35 @@ class NodeMap:
                         node = unformedNodes.pop()
                         #Seems kind of ugly but is actually the fastest way to get an element without removing.
                         unformedNodes.add(node)
+                        
                         nodeSet.add(node)
                         for node in nodeSet.nodeList:
                                 if node in unformedNodes:
                                         unformedNodes.remove(node)
-        def getAllPaths(self, paths=[]):
+        def filterMap(self, minimumSize = 3):
+                rmList = list()
+                for nodeSet in self.nodeSetList:
+                        print(nodeSet.size)
+                for nodeSet in self.nodeSetList:
+                        if(nodeSet.size < minimumSize):
+                                rmList.append(nodeSet)
+                for rmItem in rmList:
+                        self.nodeSetList.remove(rmItem)
+                                
+        def getAllPaths(self, paths=None):
+                minLength = 3
+                #Workaround for python bug to start paths as an empty list.
+                if(paths==None):
+                        paths = []
+                
+                #print(self.allNodes)
                 self.nodeSetList
+
                 if not self.nodeSetList:
                         return []
+                
                 bestPath = None
+
                 for nodeSet in self.nodeSetList:
                         if bestPath == None:
                                 nodeSet.solveValue()
@@ -198,11 +235,6 @@ class NodeMap:
                         fPath.append(fNode)
                 paths.append(fPath)
                 self.getAllPaths(paths)
-
-
-                #paths isnt getting reset...
-                #passback = paths
-                #paths = []
                 return(paths)
         
         
