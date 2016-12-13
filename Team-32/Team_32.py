@@ -68,7 +68,7 @@ class GUI:
         self.w.resize(250, 150)
         self.w.move(300, 300)
         print(self.w)
-        self.cap = cv2.VideoCapture(1)
+        self.cap = cv2.VideoCapture(0)
         ret, frame = self.cap.read()
         ret = self.cap.set(4,1080)
         ret = self.cap.set(3,1920)
@@ -93,7 +93,7 @@ count = 0
 imageTest = True
 shouldtap = False
 imageSize = [720, 1280]
-screenSize = ADBSwipe.getScreenSize()
+#screenSize = ADBSwipe.getScreenSize()
 
 #if(imageTest == True):
 cap = cv2.VideoCapture(0)
@@ -116,7 +116,7 @@ def getFrame(transformedImage):
     if(solvedList is not None):
         for path in solvedList:
             if(path is not None):
-                pathIndex = pathIndex + 1
+#                pathIndex = pathIndex + 1
                 for i in range(len(path)-1):
                     cv2.line(transformedImage,(path[i][0],path[i][1]),(path[i+1][0],path[i+1][1]), (0,255,0),3)
     return transformedImage
