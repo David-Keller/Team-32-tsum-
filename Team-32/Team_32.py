@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import time
 import sys
+import TeensySerialMouse
 
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, 
     QLabel, QApplication)
@@ -82,6 +83,11 @@ class GUI:
 def myTimeout():
     myGUI.refresh()
     print("Timer triggered.")
+
+
+tsm = TeensySerialMouse.TeensySerialMouse()
+tsm.port('COM1')
+#tsm.swipe(xyList)
 
 
 print("Starting application")
