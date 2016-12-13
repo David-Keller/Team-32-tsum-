@@ -76,7 +76,7 @@ class GUI:
     def refresh(self):
         frame2 = getVideoFrame(self.cap)
         self.w.updateVideo(frame2)
-        frame = getFrame(frame2)
+        frame = getFrame(frame2).copy()
         self.w.updateImage(frame)
     
 def myTimeout():
@@ -110,6 +110,7 @@ def getVideoFrame(cap):
 
 
 def getFrame(transformedImage):
+    
     solvedList = parsePaths(transformedImage)
     print(solvedList)
     #imgFrame = cv2.imread('test.png',1)
@@ -175,3 +176,10 @@ cap.release()
 cv2.destroyAllWindows()
 
 sys.exit(app.exec_())
+
+
+
+
+#draw rectangle on non searched frame
+
+#crop frame at same points of rectangel for searched frame before findtsums() is called then rotate
