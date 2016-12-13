@@ -48,6 +48,8 @@ def screenCorrection(im):
         areas.append([area,num])
         num = num + 1
     areas.sort(key=lambda areas:areas[0], reverse=True)
+    if(len(areas) == 0 ):
+        return None
     tec = contours[areas[0][1]]
     #im = cv2.drawContours(im,[tec],-1,(255,255,0),5)
     #im = cv2.drawContours(im,[contours[areas[2][1]]],-1,(255,127,0),5)
@@ -86,8 +88,8 @@ def screenCorrection(im):
                 tempr = i
             cv2.rectangle(im,(i[0],i[1]), (i[0]+i[2], i[1]+i[3]),(128,255,128), 2)
 
-        cv2.rectangle(im,(templ[0],templ[1]), (templ[0]+templ[2], templ[1]+templ[3]),(0,255,200), 2)
-        cv2.rectangle(im,(tempr[0],tempr[1]), (tempr[0]+tempr[2], tempr[1]+tempr[3]),(0,255,255), 2)
+        cv2.rectangle(im,(templ[0],templ[1]), (templ[0]+templ[2], templ[1]+templ[3]),(100,255,200), 2)
+        cv2.rectangle(im,(tempr[0],tempr[1]), (tempr[0]+tempr[2], tempr[1]+tempr[3]),(100,255,255), 2)
 
 
     Gerrode = colorfilter(colorChange,Glower, Gupper,1,1)
@@ -139,21 +141,21 @@ def screenCorrection(im):
 
 
 
-#coords are in greaterthan
+##coords are in greaterthan
 
 
-cap = cv2.VideoCapture(0)
-ret, frame = cap.read()
-ret = cap.set(4,1080)
-ret = cap.set(3,1920)
-shouldtap = False
+#cap = cv2.VideoCapture(0)
+#ret, frame = cap.read()
+#ret = cap.set(4,1080)
+#ret = cap.set(3,1920)
+#shouldtap = False
 
-while(True):
-    ret, frame = cap.read() 
-    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
-    #im = np.rot90(im)
-    screenCorrection(im)
+#while(True):
+#    ret, frame = cap.read() 
+#    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
+#    #im = np.rot90(im)
+#    screenCorrection(im)
 
 
-im = cv2.imread('test_data.png',1)
-screenCorrection(im)
+#im = cv2.imread('test_data.png',1)
+#screenCorrection(im)
