@@ -83,18 +83,14 @@ def myTimeout():
     myGUI.refresh()
     
 
-<<<<<<< HEAD
-mouse = TeensySeialMouse()
-=======
+#mouse = TeensySeial.MouseTeensySeialMouse()
 
-tsm = TeensySerialMouse.TeensySerialMouse()
-tsm.port('COM1')
+tsm = TeensySerialMouse()
+#tsm.port('COM1')
 #tsm.swipe(xyList)
 
-
->>>>>>> origin/master
 print("Starting application")
-myMouse = TeensySerialDisplay()
+#myMouse = TeensySerialDisplay()
 app = QApplication(sys.argv)
 myGUI = GUI()
 start = time.time()
@@ -110,7 +106,7 @@ def getVideoFrame(cap):
     ret = cap.set(4,1080)
     ret = cap.set(3,1920)
     
-    cv2.rectangle(vframe, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
+    cv2.rectangle(vFrame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
     """
     TODO: Having trouble getting rectangle to draw; might be because I don't have video camera.
     """
