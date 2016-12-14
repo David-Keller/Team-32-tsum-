@@ -10,10 +10,9 @@ from PyQt5.QtGui import QPixmap, QImage
 from PyQt5 import QtCore
 #import all user created functions and classes
 from solveGraph import *
+from TeensySerialMouse import *
 from findTsums import findTsums
 import ADBSwipe
-
-print("Test zero?")
 
 class GUI:
     class sample(QWidget):
@@ -21,7 +20,6 @@ class GUI:
             super().__init__()
             self.initUI()
             print("Sample Init complete")
-                
         def initUI(self):      
             hbox = QHBoxLayout(self)
             self.pixmap = QPixmap('test.png')
@@ -50,8 +48,8 @@ class GUI:
             pixmap = QPixmap(qImg)
             self.lbl2.setPixmap(pixmap.scaled(IMG_WEIGHT, IMG_HEIGHT))
         def updateVideo(self, frame):
-            IMG_HEIGHT = 300
-            IMG_WEIGHT = 200
+            VID_HEIGHT = 200
+            VID_WEIGHT = 300
             if (frame is None):
                 print("vN")
                 return
@@ -61,7 +59,7 @@ class GUI:
             cv2.cvtColor(frame, cv2.COLOR_BGR2RGB, newFrame)                                           
             qImg = QImage(newFrame.data, width, height, bytesPerLine, QImage.Format_RGB888)
             pixmap = QPixmap(qImg)
-            self.lbl.setPixmap(pixmap.scaled(IMG_WEIGHT,IMG_HEIGHT))
+            self.lbl.setPixmap(pixmap.scaled(VID_WEIGHT,VID_HEIGHT))
             
     def __init__(self):
         self.w = self.sample()
@@ -69,22 +67,24 @@ class GUI:
         self.w.move(300, 300)
         print(self.w)
         self.cap = cv2.VideoCapture(0)
-        ret, frame = self.cap.read()
-        ret = self.cap.set(4,1080)
-        ret = self.cap.set(3,1920)
+        #ret, frame = self.cap.read()
+        #ret = self.cap.set(4,1080)
+        #ret = self.cap.set(3,1920)
         
     def refresh(self):
         frame2 = getVideoFrame(self.cap)
         self.w.updateVideo(frame2)
-        frame = getFrame(frame2).copy()
+        frame = getFrame(frame2)
         self.w.updateImage(frame)
-    
+        
 def myTimeout():
-    myGUI.refresh()
     print("Timer triggered.")
+    myGUI.refresh()
+    
 
-
+mouse = TeensySeialMouse()
 print("Starting application")
+myMouse = TeensySerialDisplay()
 app = QApplication(sys.argv)
 myGUI = GUI()
 start = time.time()
@@ -93,42 +93,39 @@ count = 0
 imageTest = True
 shouldtap = False
 imageSize = [720, 1280]
-#screenSize = ADBSwipe.getScreenSize()
-
-#if(imageTest == True):
-cap = cv2.VideoCapture(0)
-ret, frame = cap.read()
-ret = cap.set(4,1080)
-ret = cap.set(3,1920)
 
 def getVideoFrame(cap):
     ret, vFrame = cap.read()
-#    vFrame = cv2.imread('test3.png',1)
+#    vFrame = cv2.imread('test1.png',1)
     ret = cap.set(4,1080)
     ret = cap.set(3,1920)
+    
+    cv2.rectangle(vframe, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
+    """
+    TODO: Having trouble getting rectangle to draw; might be because I don't have video camera.
+    """
     return vFrame
 
 
-def getFrame(transformedImage):
-    
-    solvedList = parsePaths(transformedImage)
-    print(solvedList)
-    #imgFrame = cv2.imread('test.png',1)
+def getFrame(frame):
+    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
+    im = np.rot90(im)
+    solvedList = parsePaths(im)
+    #print(solvedList)
     if(solvedList is not None):
         for path in solvedList:
+            mouse.swipe(path) 
             if(path is not None):
-#                pathIndex = pathIndex + 1
                 for i in range(len(path)-1):
-                    cv2.line(transformedImage,(path[i][0],path[i][1]),(path[i+1][0],path[i+1][1]), (0,255,0),3)
-    return transformedImage
+                    cv2.line(im,(path[i][0],path[i][1]),(path[i+1][0],path[i+1][1]), (0,255,0),3)
+    
+    return im
     
 def parsePaths(frame):  
     if(frame is None):
         print("pPnull")
         return
-    im = frame[20:690,50:1220].copy() #the copy is so any manipulatons to frame dont show up in im
-    im = np.rot90(im)
-    tsumList = findTsums(im)
+    tsumList = findTsums(frame)
     if (tsumList is None):
         return
     if(tsumList[0] is not None):
@@ -152,27 +149,26 @@ def parsePaths(frame):
     solvedList = myMap.getAllPaths()
     if(allSets is not None):
         for connection in allSets:
-            cv2.line(tsumList[1],(connection[0][0],connection[0][1]),(connection[1][0],connection[1][1]), (255,0,0),10)
-
-    pathIndex = 0
-   
+            cv2.line(frame,(connection[0][0],connection[0][1]),(connection[1][0],connection[1][1]), (255,0,0),10)
             
-    cv2.rectangle(frame, (50,20), (1220,690), (0,255,0), thickness=2, lineType=8, shift=0)
-    if(imageTest == True):
-        tsumList[1] = cv2.resize(tsumList[1],None,fx = 0.5,fy =0.5)
+    
+#    if(imageTest == True):
+ #       tsumList[1] = cv2.resize(tsumList[1],None,fx = 0.5,fy =0.5)
 
     return solvedList
 
-  
+
+
+print("B")
 timer = QtCore.QTimer()
 timer.setSingleShot(False)
-timer.setInterval(200)
+timer.setInterval(1000)
 timer.timeout.connect(myTimeout)
-timer.start(200)
+timer.start(1000)
 #gui.update()
 #time.sleep(10000)
 ## When everything done, release the capture
-cap.release()
+#cap.release()
 cv2.destroyAllWindows()
 
 sys.exit(app.exec_())

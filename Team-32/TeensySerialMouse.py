@@ -52,8 +52,11 @@ class TeensySerialMouse:
 		self.delay()
 	
 	def swipe(self, xyList):
+		self.moveTo(xyList[0])
+		self.mouseButton(1)
 		for x,y in xyList:
 			self.moveTo(x, y)
+		self.moveButton(0)
 			
 	def close(self):
 		self.serial.close()
