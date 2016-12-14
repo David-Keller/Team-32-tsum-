@@ -67,7 +67,7 @@ class GUI:
         self.w.resize(250, 150)
         self.w.move(300, 300)
         print(self.w)
-        self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(1)
         #ret, frame = self.cap.read()
         #ret = self.cap.set(4,1080)
         #ret = self.cap.set(3,1920)
@@ -120,7 +120,7 @@ def getFrame(frame):
     #print(solvedList)
     if(solvedList is not None):
         for path in solvedList:
-            mouse.swipe(path) 
+            tsm.swipe(path) 
             if(path is not None):
                 for i in range(len(path)-1):
                     cv2.line(im,(path[i][0],path[i][1]),(path[i+1][0],path[i+1][1]), (0,255,0),3)
@@ -155,7 +155,8 @@ def parsePaths(frame):
     solvedList = myMap.getAllPaths()
     if(allSets is not None):
         for connection in allSets:
-            cv2.line(frame,(connection[0][0],connection[0][1]),(connection[1][0],connection[1][1]), (255,0,0),10)
+            print(allSets)
+            #cv2.line(frame,(connection[0][0],connection[0][1]),(connection[1][0],connection[1][1]), (255,0,0),10)
             
     
 #    if(imageTest == True):
