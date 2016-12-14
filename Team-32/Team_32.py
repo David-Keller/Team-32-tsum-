@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 import time
 import sys
+import TeensySerialMouse
 
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout, 
     QLabel, QApplication)
@@ -82,7 +83,16 @@ def myTimeout():
     myGUI.refresh()
     
 
+<<<<<<< HEAD
 mouse = TeensySeialMouse()
+=======
+
+tsm = TeensySerialMouse.TeensySerialMouse()
+tsm.port('COM1')
+#tsm.swipe(xyList)
+
+
+>>>>>>> origin/master
 print("Starting application")
 myMouse = TeensySerialDisplay()
 app = QApplication(sys.argv)
